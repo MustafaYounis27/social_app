@@ -53,7 +53,7 @@ class NewPostScreen extends StatelessWidget {
                     CircleAvatar(
                       radius: 25.0,
                       backgroundImage: NetworkImage(
-                        'https://image.freepik.com/free-photo/surprised-female-with-dark-hair-pointing-both-index-fingers-up-with-excited-facial-expression-isolated-blue-wall_176532-14083.jpg',
+                        '${SocialCubit.get(context).userModel.image}',
                       ),
                     ),
                     SizedBox(
@@ -61,7 +61,7 @@ class NewPostScreen extends StatelessWidget {
                     ),
                     Expanded(
                       child: Text(
-                        'Mustafa Mahmoud',
+                        '${SocialCubit.get(context).userModel.name}',
                       ),
                     ),
                   ],

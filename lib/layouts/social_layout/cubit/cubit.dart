@@ -54,7 +54,8 @@ class SocialCubit extends Cubit<SocialStates> {
   ];
 
   void changeBottomNav(int index) {
-    if (index == 1) getUsers();
+    if (index == 1) getChats();
+    if (index == 3) getUsers();
     if (index == 2)
       emit(SocialNewPostState());
     else {
@@ -350,6 +351,25 @@ class SocialCubit extends Cubit<SocialStates> {
     emit(SocialChangeWritingState());
   }
 
+  List<SocialUserModel> chats = [];
+
+  void getChats() {
+    emit(SocialGetChatsLoadingState());
+
+    if (chats.length == 0)
+      FirebaseFirestore.instance.collection('users').get().then((value) {
+        value.docs.forEach((element) {
+          if (element.data()['uId'] != userModel.uId)
+            chats.add(SocialUserModel.fromJson(element.data()));
+        });
+
+        emit(SocialGetChatsSuccessState());
+      }).catchError((error) {
+        print(error.toString());
+        emit(SocialGetChatsErrorState(error.toString()));
+      });
+  }
+
   List<SocialUserModel> users = [];
 
   void getUsers() {
@@ -358,8 +378,7 @@ class SocialCubit extends Cubit<SocialStates> {
     if (users.length == 0)
       FirebaseFirestore.instance.collection('users').get().then((value) {
         value.docs.forEach((element) {
-          if (element.data()['uId'] != userModel.uId)
-            users.add(SocialUserModel.fromJson(element.data()));
+          users.add(SocialUserModel.fromJson(element.data()));
         });
 
         emit(SocialGetAllUsersLoadingState());

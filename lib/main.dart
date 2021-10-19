@@ -2,10 +2,8 @@ import 'package:bloc/bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/layouts/news_layout/cubit/cubit.dart';
-import 'package:flutter_app/layouts/news_layout/cubit/states.dart';
-import 'package:flutter_app/layouts/shop_layout/cubit/cubit.dart';
 import 'package:flutter_app/layouts/social_layout/cubit/cubit.dart';
+import 'package:flutter_app/layouts/social_layout/cubit/state.dart';
 import 'package:flutter_app/layouts/social_layout/social_layout.dart';
 import 'package:flutter_app/modules/social_app/login/social_login_screen.dart';
 
@@ -50,18 +48,6 @@ void main() async {
 
   Widget widget;
 
-  // bool onBoarding = CacheHelper.getData(key: 'onBoarding');
-  // token = CacheHelper.getData(key: 'token');
-  //
-  // if (onBoarding != null) {
-  //   if (token != null)
-  //     widget = ShopLayout();
-  //   else
-  //     widget = ShopLoginScreen();
-  // } else {
-  //   widget = OnBoardingScreen();
-  // }
-
   uId = CacheHelper.getData(key: 'uId');
 
   if(uId != null)
@@ -81,21 +67,9 @@ class MyApp extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) =>
-          NewsCubit()
-            ..changeMode(fromShared: isDark),
-        ),
-        BlocProvider(
-          create: (context) => ShopCubit()..getHomeData()..getCategories()..getFavorites()..getUserData(),
-        ),
-        BlocProvider(
+    return BlocProvider(
           create: (context) => SocialCubit()..getUserData()..getPosts(),
-        ),
-      ],
-      child: BlocConsumer<NewsCubit, NewsStates>(
+      child: BlocConsumer<SocialCubit, SocialStates>(
         listener: (context, state) {},
         builder: (context, state) {
           return MaterialApp(
